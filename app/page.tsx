@@ -111,11 +111,12 @@ export default function Home() {
 
       {!user ? (
         <button
-          onClick={handleLogin}
-          className="px-6 py-3 bg-black text-white rounded-lg"
-        >
-          Sign in with Google
-        </button>
+  onClick={handleLogin}
+  className="px-6 py-3 bg-white text-black border border-gray-300 rounded-lg shadow hover:shadow-md transition"
+>
+  Sign in with Google
+</button>
+
       ) : (
         <>
           <p className="mb-4">Logged in as: {user.email}</p>
