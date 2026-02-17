@@ -1,14 +1,41 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { supabase } from "./lib/supabase";
 
 
-
 export default function Home() {
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    // Get current session on load
+    const getSession = async () => {
+      const { data } = await supabase.auth.getSession();
+      setUser(data.session?.user ?? null);
+    };
+
+    getSession();
+
+    // Listen for auth changes
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setUser(session?.user ?? null);
+      }
+    );
+
+    return () => {
+      listener.subscription.unsubscribe();
+    };
+  }, []);
+
   const handleLogin = async () => {
     await supabase.auth.signInWithOAuth({
       provider: "google",
     });
+  };
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
   };
 
   return (
@@ -17,12 +44,24 @@ export default function Home() {
         Smart Bookmark App 🚀
       </h1>
 
-      <button
-        onClick={handleLogin}
-        className="px-6 py-3 bg-black text-white rounded-lg"
-      >
-        Sign in with Google
-      </button>
+      {user ? (
+        <>
+          <p className="mb-4">Logged in as: {user.email}</p>
+          <button
+            onClick={handleLogout}
+            className="px-6 py-3 bg-red-600 text-white rounded-lg"
+          >
+            Logout
+          </button>
+        </>
+      ) : (
+        <button
+          onClick={handleLogin}
+          className="px-6 py-3 bg-black text-white rounded-lg"
+        >
+          Sign in with Google
+        </button>
+      )}
     </main>
   );
 }
