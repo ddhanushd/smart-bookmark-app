@@ -1,36 +1,116 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+📌 Smart Bookmark App
 
-## Getting Started
+A full-stack bookmark manager built with Next.js (App Router) and Supabase.
 
-First, run the development server:
+Users can sign in with Google, add private bookmarks, and see real-time updates across multiple tabs without refreshing.
 
-```bash
+🚀 Live Demo
+
+🔗 https://smart-bookmark-app-chi-wine.vercel.app/
+
+🛠 Tech Stack
+
+Next.js (App Router)
+
+Supabase
+
+Authentication (Google OAuth)
+
+Postgres Database
+
+Row Level Security (RLS)
+
+Realtime subscriptions
+
+Tailwind CSS
+
+Vercel (Deployment)
+
+✨ Features
+
+Google OAuth login (no email/password)
+
+Private bookmarks per user (RLS enforced)
+
+Add and delete bookmarks
+
+Real-time updates across tabs
+
+Cross-tab auth sync
+
+Production deployment on Vercel
+
+🔐 Database Design
+
+Table: bookmarks
+
+Column	Type
+id	uuid (PK)
+user_id	uuid
+title	text
+url	text
+created_at	timestamp
+
+Row Level Security policies ensure:
+
+Users can only view their own bookmarks
+
+Users can only insert bookmarks with their own user_id
+
+Users can only delete their own bookmarks
+
+⚡ Realtime Implementation
+
+Supabase Realtime subscriptions listen to postgres_changes on the bookmarks table.
+
+When changes occur:
+
+A refetch is triggered
+
+UI updates automatically without refresh
+
+🧠 Challenges & Solutions
+1️⃣ OAuth Redirect Configuration
+
+Configuring Google Cloud OAuth redirect URIs and syncing them with Supabase required careful setup to avoid redirect_uri_mismatch errors.
+
+2️⃣ Row Level Security (RLS)
+
+Ensuring bookmarks remain private required proper RLS policies using:
+
+auth.uid() = user_id
+
+3️⃣ Cross-Tab Auth Sync
+
+Using supabase.auth.onAuthStateChange ensured login/logout state updates across multiple tabs.
+
+4️⃣ Environment Variables in Production
+
+Handled environment variables securely using:
+
+.env.local for development
+
+Vercel environment variables for production
+
+🧪 Running Locally
+
+Clone repository
+
+Install dependencies:
+
+npm install
+
+
+Create .env.local:
+
+NEXT_PUBLIC_SUPABASE_URL=your_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+
+
+Run:
+
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+📦 Deployment
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Deployed on Vercel with automatic CI/CD via GitHub integration.
